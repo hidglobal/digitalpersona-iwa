@@ -1,0 +1,16 @@
+*.json  linguist-language=JSON-with-Comments
+
+*.rc diff
+*.rc? diff
+*.mc diff
+*.xml diff
+*.adml diff
+*.sql diff
+*.cmd diff
+*.md diff
+
+dist/** diff -merge
+dist/** linguist-generated=true
+
+*.umd.* diff -merge
+*.umd.* linguist-generated=true
