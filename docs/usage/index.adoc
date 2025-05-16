@@ -1,0 +1,267 @@
+= DigitalPersona Integrated Windows Authentication (IWA) API
+:table-caption!:
+
+toc::[]
+
+== Overview
+
+As a part of DigitalPersona Access Management API (DPAM), the
+`@digitalpersona/iwa` library provides Javascript API allowing users of web
+applications to seamlessly authenticate with their Windows credentials.
+
+IMPORTANT: The API is designed to be used in a browser environment only!
+It is not a NodeJS library!
+
+== Installing
+
+```shell
+> npm install @digitalpersona/iwa @digitalpersona/websdk
+```
+
+Once the package is installed, it can be imported into your browser application.
+
+The `@digitalpersona/iwat` provides only a legacy IIFE module.
+No modern ESM module is provided.
+
+The IIFE module works in legacy and/or for simple "build-less" applications,
+with no requirements for bundling and dead code elimination. The IIFE module
+must be imported using the HTML `<script>` tag. You may use a CDN like unpkg.com:
+`<script src="https://unpkg.com/@digitalpersona/iwa/dist/iwa.sdk.js">`.
+
+The IIFE module adds a global `IWA.WebApi` property to the `window` object.
+When using bundlers like Rollup, Webpack, etc, the `"IWA.WebApi"` object must be
+added to the list of "globals", and the `"@digitalpersona/iwa"` must be added
+to the list of "external" modules, so it will not be bundled into the final
+output.
+
+IMPORTANT: The library has a peer dependecy on the `@digitalpersona/websdk` package,
+  which provides a JavaScript interface to the native API.
+  Make sure the `@digitalpersona/websdk` is also installed as a runtime dependency
+  into your project. The `@digitalpersona/websdk` is currently available only
+  as an IIFE module, so you also must import it using a `<script>` tag,
+  and add `"WebSdk"` to the lsit of "globals", and add `"@digitalpersona/websdk"`
+  to the list of "external" modules to prevent bundling.
+
+If you are using a vanilla Javascript application, you can add the following
+`script` tag to your HTML page:
+
+[separator=¦]
+|===
+a¦
+.index.html
+[source,html]
+----
+<script type="text/javascript" src="scripts/websdk.client.ui.js"></script>
+<script type="text/javascript" src="scripts/iwa.sdk.js"></script>
+<script type="text/javascript" src="index.js"></script>
+----
+
+.index.js
+[source,js]
+----
+/// <reference types="@digitalpersona/websdk" />
+/// <reference types="@digitalpersona/iwa" />
+
+class IWASigninControl
+{
+  constructor() {
+    this.api = new IWA.WebApi();
+    ...
+  }
+  ...
+}
+...
+
+----
+|===
+
+
+If you are using Angular project (Typescript + bundler), you can
+import the library as follows:
+
+[separator=¦]
+|===
+a¦
+.angular.json
+[source,json]
+----
+{
+  "projects": {
+    "my-app": {
+      "architect": {
+        "build": {
+          "options": {
+            "index": "src/index.html",
+            "browser": "src/main.ts",
+            "scripts": [
+              "./node_modules/@digitalpersona/websdk/dist/websdk.client.ui.js",
+              "./node_modules/@digitalpersona/iwa/dist/iwa.sdk.js"
+            ]
+          }
+        },
+      }
+    }
+  }
+}
+----
+
+.app.component.ts
+[source,typescript]
+----
+/// <reference types="@digitalpersona/websdk" />
+/// <reference types="@digitalpersona/iwa" />
+
+const api = new IWA.WebApi();
+...
+
+----
+|===
+
+NOTE: The `projects.my-app.architect.build.scripts` property in the `angular.json`
+is the https://angular.dev/reference/configs/workspace-config#build-target[Angular's way]
+to bundle external modules like `@digitalpersona/websdk` and `@digitalpersona/iwa`
+as if they would be loaded with the `<script>` tag.
+
+NOTE: The `/// <reference types="..." />` need to be added avoid TypeScript
+typing errors.
+You may also need to set https://www.typescriptlang.org/tsconfig/#moduleResolution[`"moduleResolution": "bundler"`]
+in your `tsconfig.json`, to tell TypeScript to use the modern module resolution algorithm.
+
+== Usage
+
+In a typical use case, users navigate to a logon page, and there they are presented
+with a logon. The page either starts the Integrated Windows Authenticatione process
+automatically, or allows the user to initiate it by clicking a UI element like buttons.
+
+In your IWA signin controller class, create an instance of a `IWA.WebApi` class
+and subscribe to its events:
+
+[separator=¦]
+|===
+a¦
+
+.iwaSignin.component.ts
+[source,typescript]
+----
+// NOTE: make sure you import only typings here, not a code!
+// Also make sure this is not a NodeJS module. IWA API is a browser-only library!
+
+/// <reference types="@digitalpersona/websdk" />
+/// <reference types="@digitalpersona/iwa" />
+
+export class IWASigninControl
+{
+    constructor() {
+      this.api = new IWA.WebApi();
+
+      this.api.onCommunicationFailed = this.this.onCommunicationFailed.bind(this);
+    }
+
+    // Event handlers
+    async onCommunicationFailed(event) { ... }
+    ...
+}
+----
+|===
+
+The IWA API requires a HID DigitalPersona Agent running on a client machine.
+This agent provides a secure communication channel between a browser and
+the native Windows logon API.
+
+The DigitalPersona Agent is native Windows application which is a part of
+HID DigitalPersona clients, like:
+
+* HID DigitalPersona Worksation,
+* HID DIgitalPersona Kiosk
+* HID Authentication Device Client (ADC, former Lite Client).
+
+If you expect your users may not have any of HID DigitalPersona clients installed,
+provide them with a https://digitalpersona.hidglobal.com/lite-client/[link
+to the HID ADC download], appearing on a communication error:
+
+
+[separator=¦]
+|===
+a¦
+
+.iwaSignin.component.html
+[source,html]
+----
+<div class="reader-communication-error">
+  Cannot use Integrated Windows Authentication.
+  If you do not use HID DigitalPersona Workstation or Kiosk,
+  you may need to download and install the
+  <a href="https://digitalpersona.hidglobal.com/lite-client/">
+    HID Authentication Device Client
+  </a>.
+</div>
+----
+
+.iwaSignin.component.ts
+[source,typescript]
+----
+class IWASigninControl
+{
+    ...
+    async onCommunicationFailed(event) {
+        // TODO: display the `.reader-communication-error` block
+        ...
+    }
+}
+----
+|===
+
+To start an Integrated Windows Authentication flow with DigitalPersona WebAuh service,
+call an `authenticate` method passing the WebAuth endpoint URL::
+
+[separator=¦]
+|===
+a¦
+
+[source,typescript]
+----
+class IWASigninControl {
+    ....
+    async signin() {
+        try {
+            const jwtToken = await this.api.authenticate(webAuthEndpoint);
+        } catch (error) {
+            this.handleError(error);
+        }
+    }
+}
+----
+|===
+
+If authentication succeed, a JWT token will be returned, otherwise an authentication
+error will be returned.
+
+If you use a different server endpoint which does not supports the DigitalPersona
+WebAuth service contract, you can invoke client-side `init`, `continue` and `term`
+methods directly, while implementing your own server-side flow methods.
+
+The custom authentication flow should be implemented as follows:
+
+1. Request the server to initiate an authentication flow on the server side.
+   The server should create and return a server authentication handle.
+2. Call `WebApi.init` to initiate the authentication flow on the native client.
+   The client returns a client authentication handle, and authentication data.
+3. Send the client's authentication data to the server.
+   If the server is unable to continue, it should return an error.
+   If the server has a token cached, it may return the JWT token immediately.
+   In both cases the client should proceed to step 6.
+   If the server need further validation steps, it should return challenge data.
+4. Pass the server's challenge data to the native client, calling `continue` method.
+   The client will return a response data.
+5. Send the client's response to the server.
+   If the server is unable to continue, it should return an error.
+   If the server can produce a token, it may return the JWT token.
+   If the server needs more vaidation, it may send another challenge, in which
+   case the steps 4-5 must be repeated until the server returns a token, or
+   returns an error, or a limit on number of challenge-response steps is exceeded
+   (the `authenticate` method has limit of 2 challenge-response roundtrips).
+6. When the server returns a JWT token or an error, the client must finalize the flow
+   and close both the client's authentication handle using the `term` method,
+   and the server's authentication handle by making a corresponding server call.
+   Then the received JWT token or an error should be returned to the caller.
+

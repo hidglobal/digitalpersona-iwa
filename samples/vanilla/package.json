@@ -1,0 +1,41 @@
+{
+  "name": "vanilla",
+  "version": "1.0.0",
+  "description": "HID DigitalPersona Fingerprint API Test (Vanilla JS)",
+  "private": true,
+  "type": "module",
+  "author": "HID Global",
+  "maintainers": [
+    {
+      "name": "Andrey Bronnikov",
+      "email": "Andrey.Bronnikov@hidglobal.com"
+    }
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "dependencies": {
+    "@digitalpersona/iwa": "../..",
+    "@digitalpersona/websdk": "^1.0.1"
+  },
+  "volta": {
+    "node": "20.17.0"
+  },
+  "scripts": {
+    "clean": "rimraf ./dist",
+    "prepare:websdk": "copyfiles -f node_modules/@digitalpersona/websdk/dist/websdk.client.ui.* scripts/websdk",
+    "prepare:fp": "copyfiles -f node_modules/@digitalpersona/fingerprint/dist/fingerprint.sdk.* scripts/fingerprint",
+    "prepare": "rimraf ./scripts && npm run prepare:websdk && npm run prepare:fp",
+    "deploy": "copyfiles index.* scripts/**/* dist",
+    "build": "npm run clean && npm run deploy",
+    "start": "npm run build && http-server -o -c-1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.9.1",
+    "@types/eslint__js": "^8.42.3",
+    "copyfiles": "^2.4.1",
+    "eslint": "^9.9.1",
+    "eslint-plugin-compat": "^6.0.0",
+    "http-server": "^14.1.1",
+    "rimraf": "^6.0.1"
+  }
+}

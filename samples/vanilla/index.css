@@ -1,0 +1,121 @@
+:root {
+
+	/* Core Branding */
+	--color-cerulean: #00aeef;
+	--color-endeavor: #00539b;
+	--color-prussian-blue: #002e56;
+	--color-spindle: #b0cbea;
+	--color-white: white;
+}
+
+@supports (interpolate-size: allow-keywords) {
+  :root {
+      interpolate-size: allow-keywords;
+  }
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	color: var(--color-prussian-blue);
+}
+header {
+  background-color: var(--color-endeavor);
+  padding: 0px 30px;
+  color: var(--color-white);
+}
+footer {
+  text-align: center;
+  margin-top: 2em;
+}
+body > footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+	background-color: var(--color-endeavor);
+	color: var(--color-white);
+}
+
+main form {
+  padding: 1em;
+}
+
+dialog {
+  max-width: 30em;
+  border: 2px solid lightgray;
+}
+
+section {
+  margin-bottom: 1em;
+}
+
+fieldset {
+  border: 2px solid lightgray;
+  margin-bottom: 1em;
+  margin: 0;
+}
+legend {
+  padding: 0 0.5em;
+}
+
+dt {
+  padding-left: 1em;
+}
+
+label {
+  display: block;
+}
+
+input {
+  font-size: medium;
+  line-height: 1.5em;
+}
+
+button {
+  display: inline-block;
+  min-width: 8em;
+  font-size: larger;
+  line-height: 1.5em;
+}
+
+button.small {
+  min-width: 0;
+}
+
+/* Item lists, with prompts */
+list::before {
+  content: attr(prompt-more);
+  display: block;
+  margin: 0.5em;
+  color: #377;
+  font-weight: 600;
+}
+list:empty::before {
+  content: attr(prompt);
+}
+
+pre {
+  font-family: 'Lucida Console';
+  font-size: 9pt;
+  color: darkblue;
+  margin: 0;
+}
+
+#error  {
+  display: block;
+  font-size: large;
+  color: red;
+}
+#error:empty {
+  display: none;
+}
+
+/* Visual logic */
+
+/* #captureControl[active] #start        { display: none; }
+#captureControl[active] #cannotStart  { display: none; }
+
+#captureControl:not([active]) #stop           { display: none; }
+#captureControl:not([active]) #captureResults { display: none; } */
