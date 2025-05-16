@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "target": "es5",
+    "sourceMap": true,
+
+    "lib": [ "es2016", "dom" ],
+
+    /* Modules */
+    "module": "es2015",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "removeComments": true,
+    "declaration": true,
+
+    /* Type Checking */
+    "strict": true,
+  },
+  "exclude": [
+      "node_modules",
+      "dist",
+      "samples",
+      "src/**/*.spec.ts",
+      "-*",
+      "~*"
+  ]
+}
