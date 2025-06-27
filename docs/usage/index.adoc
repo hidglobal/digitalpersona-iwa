@@ -7,12 +7,12 @@ toc::[]
 
 As a part of DigitalPersona Access Management API (DPAM), the
 `@digitalpersona/iwa` library provides Javascript API allowing users of web
-applications to seamlessly authenticate with their Windows credentials.
+applications to seamlessly authenticate with their Microsoft® Windows credentials.
 
 IMPORTANT: The API is designed to be used in a browser environment only!
 It is not a NodeJS library!
 
-== Installing
+== Installation
 
 ```shell
 > npm install @digitalpersona/iwa @digitalpersona/websdk
@@ -25,21 +25,21 @@ No modern ESM module is provided.
 
 The IIFE module works in legacy and/or for simple "build-less" applications,
 with no requirements for bundling and dead code elimination. The IIFE module
-must be imported using the HTML `<script>` tag. You may use a CDN like unpkg.com:
+must be imported using the HTML `<script>` tag. You can use a CDN such as unpkg.com:
 `<script src="https://unpkg.com/@digitalpersona/iwa/dist/iwa.sdk.js">`.
 
 The IIFE module adds a global `IWA.WebApi` property to the `window` object.
-When using bundlers like Rollup, Webpack, etc, the `"IWA.WebApi"` object must be
+When using bundlers such as Rollup, Webpack, etc, the `"IWA.WebApi"` object must be
 added to the list of "globals", and the `"@digitalpersona/iwa"` must be added
 to the list of "external" modules, so it will not be bundled into the final
 output.
 
-IMPORTANT: The library has a peer dependecy on the `@digitalpersona/websdk` package,
+IMPORTANT: The library has a peer dependency on the `@digitalpersona/websdk` package,
   which provides a JavaScript interface to the native API.
   Make sure the `@digitalpersona/websdk` is also installed as a runtime dependency
-  into your project. The `@digitalpersona/websdk` is currently available only
+  in your project. The `@digitalpersona/websdk` is currently available only
   as an IIFE module, so you also must import it using a `<script>` tag,
-  and add `"WebSdk"` to the lsit of "globals", and add `"@digitalpersona/websdk"`
+  and add `"WebSdk"` to the list of "globals", and add `"@digitalpersona/websdk"`
   to the list of "external" modules to prevent bundling.
 
 If you are using a vanilla Javascript application, you can add the following
@@ -119,7 +119,7 @@ const api = new IWA.WebApi();
 
 NOTE: The `projects.my-app.architect.build.scripts` property in the `angular.json`
 is the https://angular.dev/reference/configs/workspace-config#build-target[Angular's way]
-to bundle external modules like `@digitalpersona/websdk` and `@digitalpersona/iwa`
+to bundle external modules such as `@digitalpersona/websdk` and `@digitalpersona/iwa`
 as if they would be loaded with the `<script>` tag.
 
 NOTE: The `/// <reference types="..." />` need to be added avoid TypeScript
@@ -129,11 +129,11 @@ in your `tsconfig.json`, to tell TypeScript to use the modern module resolution 
 
 == Usage
 
-In a typical use case, users navigate to a logon page, and there they are presented
-with a logon. The page either starts the Integrated Windows Authenticatione process
-automatically, or allows the user to initiate it by clicking a UI element like buttons.
+In a typical use case, users navigate to a logon page where they are presented
+with a logon UI. The page either starts the Integrated Windows Authentication process
+automatically or allows the user to initiate it by clicking a UI element such as buttons.
 
-In your IWA signin controller class, create an instance of a `IWA.WebApi` class
+In your IWA sign-in controller class, create an instance of an `IWA.WebApi` class
 and subscribe to its events:
 
 [separator=¦]
@@ -143,7 +143,7 @@ a¦
 .iwaSignin.component.ts
 [source,typescript]
 ----
-// NOTE: make sure you import only typings here, not a code!
+// NOTE: Make sure you import only typings here, not a code!
 // Also make sure this is not a NodeJS module. IWA API is a browser-only library!
 
 /// <reference types="@digitalpersona/websdk" />
@@ -166,18 +166,17 @@ export class IWASigninControl
 
 The IWA API requires a HID DigitalPersona Agent running on a client machine.
 This agent provides a secure communication channel between a browser and
-the native Windows logon API.
+the native Microsoft Windows logon API.
 
-The DigitalPersona Agent is native Windows application which is a part of
-HID DigitalPersona clients, like:
+The DigitalPersona Agent is a native Microsoft Windows application which is a part of
+HID DigitalPersona clients such as:
 
-* HID DigitalPersona Worksation,
+* HID DigitalPersona Workstation
 * HID DIgitalPersona Kiosk
-* HID Authentication Device Client (ADC, former Lite Client).
+* HID Authentication Device Client (ADC, previously Lite Client)
 
-If you expect your users may not have any of HID DigitalPersona clients installed,
-provide them with a https://digitalpersona.hidglobal.com/lite-client/[link
-to the HID ADC download], appearing on a communication error:
+If you expect that your users may not have any of the HID DigitalPersona clients installed, provide a https://digitalpersona.hidglobal.com/lite-client/[link
+to the HID ADC download] in a reader communication error:
 
 
 [separator=¦]
@@ -211,8 +210,8 @@ class IWASigninControl
 ----
 |===
 
-To start an Integrated Windows Authentication flow with DigitalPersona WebAuh service,
-call an `authenticate` method passing the WebAuth endpoint URL::
+To start an Integrated Windows Authentication flow with DigitalPersona WebAuth service,
+call an `authenticate` method passing the WebAuth endpoint URL:
 
 [separator=¦]
 |===
@@ -233,10 +232,10 @@ class IWASigninControl {
 ----
 |===
 
-If authentication succeed, a JWT token will be returned, otherwise an authentication
+If the authentication succeeds, a JWT token will be returned, otherwise an authentication
 error will be returned.
 
-If you use a different server endpoint which does not supports the DigitalPersona
+If you use a different server endpoint which does not support the DigitalPersona
 WebAuth service contract, you can invoke client-side `init`, `continue` and `term`
 methods directly, while implementing your own server-side flow methods.
 
@@ -250,13 +249,13 @@ The custom authentication flow should be implemented as follows:
    If the server is unable to continue, it should return an error.
    If the server has a token cached, it may return the JWT token immediately.
    In both cases the client should proceed to step 6.
-   If the server need further validation steps, it should return challenge data.
+   If the server needs further validation steps, it should return challenge data.
 4. Pass the server's challenge data to the native client, calling `continue` method.
-   The client will return a response data.
+   The client will return the response data.
 5. Send the client's response to the server.
    If the server is unable to continue, it should return an error.
    If the server can produce a token, it may return the JWT token.
-   If the server needs more vaidation, it may send another challenge, in which
+   If the server needs more validation, it may send another challenge, in which
    case the steps 4-5 must be repeated until the server returns a token, or
    returns an error, or a limit on number of challenge-response steps is exceeded
    (the `authenticate` method has limit of 2 challenge-response roundtrips).
