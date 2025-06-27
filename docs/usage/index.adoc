@@ -5,9 +5,7 @@ toc::[]
 
 == Overview
 
-As a part of DigitalPersona Access Management API (DPAM), the
-`@digitalpersona/iwa` library provides Javascript API allowing users of web
-applications to seamlessly authenticate with their Microsoft® Windows credentials.
+As a part of DigitalPersona Access Management API (DPAM), the `@digitalpersona/iwa` library provides a Javascript API allowing web applications users to seamlessly authenticate with their Microsoft® Windows credentials.
 
 IMPORTANT: The API is designed to be used in a browser environment only!
 It is not a NodeJS library!
@@ -29,7 +27,7 @@ must be imported using the HTML `<script>` tag. You can use a CDN such as unpkg.
 `<script src="https://unpkg.com/@digitalpersona/iwa/dist/iwa.sdk.js">`.
 
 The IIFE module adds a global `IWA.WebApi` property to the `window` object.
-When using bundlers such as Rollup, Webpack, etc, the `"IWA.WebApi"` object must be
+When using bundlers such as Rollup and Webpack, the `"IWA.WebApi"` object must be
 added to the list of "globals", and the `"@digitalpersona/iwa"` must be added
 to the list of "external" modules, so it will not be bundled into the final
 output.
@@ -129,12 +127,9 @@ in your `tsconfig.json`, to tell TypeScript to use the modern module resolution 
 
 == Usage
 
-In a typical use case, users navigate to a logon page where they are presented
-with a logon UI. The page either starts the Integrated Windows Authentication process
-automatically or allows the user to initiate it by clicking a UI element such as buttons.
+In a typical use case, users navigate to a logon page where they are presented with a logon UI. The page either starts the Integrated Windows Authentication process automatically or allows the user to initiate it by clicking a UI element such as buttons.
 
-In your IWA sign-in controller class, create an instance of an `IWA.WebApi` class
-and subscribe to its events:
+In your IWA sign-in controller class, create an instance of an `IWA.WebApi` class and subscribe to its events:
 
 [separator=¦]
 |===
@@ -172,7 +167,7 @@ The DigitalPersona Agent is a native Microsoft Windows application which is a pa
 HID DigitalPersona clients such as:
 
 * HID DigitalPersona Workstation
-* HID DIgitalPersona Kiosk
+* HID DigitalPersona Kiosk
 * HID Authentication Device Client (ADC, previously Lite Client)
 
 If you expect that your users may not have any of the HID DigitalPersona clients installed, provide a https://digitalpersona.hidglobal.com/lite-client/[link
@@ -248,7 +243,7 @@ The custom authentication flow should be implemented as follows:
 3. Send the client's authentication data to the server.
    If the server is unable to continue, it should return an error.
    If the server has a token cached, it may return the JWT token immediately.
-   In both cases the client should proceed to step 6.
+   In both cases, the client should proceed to step 6.
    If the server needs further validation steps, it should return challenge data.
 4. Pass the server's challenge data to the native client, calling `continue` method.
    The client will return the response data.
@@ -262,5 +257,5 @@ The custom authentication flow should be implemented as follows:
 6. When the server returns a JWT token or an error, the client must finalize the flow
    and close both the client's authentication handle using the `term` method,
    and the server's authentication handle by making a corresponding server call.
-   Then the received JWT token or an error should be returned to the caller.
+   Then, the received JWT token or an error should be returned to the caller.
 
