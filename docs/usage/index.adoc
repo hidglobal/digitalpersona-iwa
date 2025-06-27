@@ -5,7 +5,7 @@ toc::[]
 
 == Overview
 
-As a part of DigitalPersona Access Management API (DPAM), the `@digitalpersona/iwa` library provides a Javascript API allowing web applications users to seamlessly authenticate with their Microsoft® Windows credentials.
+As a part of DigitalPersona Access Management API (DPAM), the `@digitalpersona/iwa` library provides a Javascript API allowing web application users to seamlessly authenticate with their Microsoft® Windows credentials.
 
 IMPORTANT: The API is designed to be used in a browser environment only!
 It is not a NodeJS library!
